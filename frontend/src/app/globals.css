@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --line-min: 1.6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-noto-thai), sans-serif;
+  line-height: 1.6;
+  font-size: 15px;
+  letter-spacing: 0; /* Thai-first typography rule: never negative letter-spacing */
+  color: theme('colors.neutral');
+  background-color: theme('colors.tertiary');
+}
+
+/* The hub-and-spoke connecting line reused across the roadmap ("flight path") view */
+.route-line {
+  background: linear-gradient(to bottom, theme('colors.primary'), theme('colors.secondary'));
+  width: 3px;
+}
+
+.module-node {
+  border-radius: theme('borderRadius.module');
+}
