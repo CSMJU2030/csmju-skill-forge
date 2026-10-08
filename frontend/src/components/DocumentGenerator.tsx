@@ -65,6 +65,7 @@ export function DocumentGenerator({
   const [baseUrl, setBaseUrl] = useState(PROVIDERS[0].baseUrl);
   const [model, setModel] = useState('');
   const [apiKey, setApiKey] = useState('');
+  const [apiKeyVisible, setApiKeyVisible] = useState(false);
   const [retentionMode, setRetentionMode] = useState<RetentionMode>('session');
   const [retentionDays, setRetentionDays] = useState(30);
   const [savedSettings, setSavedSettings] = useState<SavedLlmSettings | null>(
@@ -346,24 +347,35 @@ export function DocumentGenerator({
             </Field>
           )}
           <Field label="API key">
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(event) => {
-                setApiKey(event.target.value);
-                setAvailableModels([]);
-                setModel('');
-                setSettingsError(null);
-              }}
-              autoComplete="new-password"
-              placeholder={
-                savedSettings
-                  ? 'บันทึกแล้วจะไม่แสดง key เดิม'
-                  : 'ใส่ API key ของผู้ให้บริการ'
-              }
-              className={inputClass}
-              required={retentionMode === 'session' || !savedSettings}
-            />
+            <div className="relative">
+              <input
+                type={apiKeyVisible ? 'text' : 'password'}
+                value={apiKey}
+                onChange={(event) => {
+                  setApiKey(event.target.value);
+                  setAvailableModels([]);
+                  setModel('');
+                  setSettingsError(null);
+                }}
+                autoComplete="new-password"
+                placeholder={
+                  savedSettings
+                    ? 'บันทึกแล้วจะไม่แสดง key เดิม'
+                    : 'ใส่ API key ของผู้ให้บริการ'
+                }
+                className={`${inputClass} pr-16`}
+                required={retentionMode === 'session' || !savedSettings}
+              />
+              <button
+                type="button"
+                aria-label={apiKeyVisible ? 'ซ่อน API key' : 'แสดง API key'}
+                aria-pressed={apiKeyVisible}
+                onClick={() => setApiKeyVisible((visible) => !visible)}
+                className="absolute inset-y-0 right-0 rounded-r-module px-3 font-body text-xs text-neutral/65 hover:text-neutral focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              >
+                {apiKeyVisible ? 'ซ่อน' : 'แสดง'}
+              </button>
+            </div>
           </Field>
           <Field label="เลือก Model ID">
             <div className="flex gap-2">
