@@ -18,8 +18,9 @@ pnpm run dev     # http://localhost:3000
 ```
 
 The backend must be running on `http://127.0.0.1:3002`; use
-`SUBSYSTEM_ID=csmju-skill-forge` in both environments and register the matching
-callback URL and role mapping in Core Hub.
+`SUBSYSTEM_ID=csmju-skill-forge` for the backend and register the matching
+callback URL and role mapping in Core Hub. The frontend reads its subsystem ID
+from the root `subsystem.yaml`; optional environment overrides must match it.
 
 ## Pages
 
