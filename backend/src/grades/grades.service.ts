@@ -14,7 +14,7 @@ export class GradesService {
   constructor(private prisma: PrismaService) {}
 
   private ownedGradeWhere(identity: GatewayIdentity, id: string) {
-    return { id, student_username: identity.username };
+    return { id, student_username: identity.coreUserId };
   }
 
   private async resolveCourse(dto: {
@@ -55,7 +55,7 @@ export class GradesService {
 
   findMine(identity: GatewayIdentity) {
     return this.prisma.grade.findMany({
-      where: { student_username: identity.username },
+      where: { student_username: identity.coreUserId },
       include: { course: true },
       orderBy: [{ semester: 'desc' }],
     });
@@ -64,21 +64,21 @@ export class GradesService {
   async upsert(identity: GatewayIdentity, dto: UpsertGradeDto) {
     const course = await this.resolveCourse(dto);
     await this.prisma.student.upsert({
-      where: { username: identity.username },
+      where: { username: identity.coreUserId },
       update: {},
-      create: { username: identity.username },
+      create: { username: identity.coreUserId },
     });
     return this.prisma.grade.upsert({
       where: {
         student_username_course_id_semester: {
-          student_username: identity.username,
+          student_username: identity.coreUserId,
           course_id: course.id,
           semester: dto.semester,
         },
       },
       update: { letter_grade: dto.letter_grade },
       create: {
-        student_username: identity.username,
+        student_username: identity.coreUserId,
         course_id: course.id,
         letter_grade: dto.letter_grade,
         semester: dto.semester,

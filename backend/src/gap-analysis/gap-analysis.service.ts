@@ -32,13 +32,13 @@ export class GapAnalysisService {
 
   async computeSkillGap(identity: GatewayIdentity): Promise<SkillGapResult | null> {
     const student = await this.prisma.student.findUnique({
-      where: { username: identity.username },
+      where: { username: identity.coreUserId },
       include: { target_career_path: { include: { skills: { include: { skill: true } } } } },
     });
     if (!student?.target_career_path) return null;
 
     const grades = await this.prisma.grade.findMany({
-      where: { student_username: identity.username, letter_grade: { not: 'W' } },
+      where: { student_username: identity.coreUserId, letter_grade: { not: 'W' } },
       include: { course: { include: { course_skills: true } } },
     });
 
@@ -109,7 +109,7 @@ export class GapAnalysisService {
     const takenCourseIds = new Set(
       (
         await this.prisma.grade.findMany({
-          where: { student_username: identity.username },
+          where: { student_username: identity.coreUserId },
           select: { course_id: true },
         })
       ).map((g) => g.course_id),

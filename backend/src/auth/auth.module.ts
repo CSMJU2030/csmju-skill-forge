@@ -1,4 +1,6 @@
 import { Global, Module } from '@nestjs/common';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 import { JwksService } from './jwks.service';
 import { JwtIdentityMiddleware } from './jwt-identity.middleware';
 
@@ -6,7 +8,8 @@ import { JwtIdentityMiddleware } from './jwt-identity.middleware';
 // MiddlewareConsumer without every feature module needing to import this one.
 @Global()
 @Module({
-  providers: [JwksService, JwtIdentityMiddleware],
-  exports: [JwksService, JwtIdentityMiddleware],
+  controllers: [AuthController],
+  providers: [JwksService, AuthService, JwtIdentityMiddleware],
+  exports: [JwksService, AuthService, JwtIdentityMiddleware],
 })
 export class AuthModule {}

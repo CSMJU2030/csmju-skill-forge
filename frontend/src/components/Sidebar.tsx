@@ -27,7 +27,11 @@ const NAV = [
 
 const ADMIN_NAV = { href: '/admin/courses', label: 'จัดการวิชา', sub: 'Course catalog (staff)', icon: Cog6ToothIcon };
 
-export function Sidebar({ role }: { role?: 'student' | 'alumni' | 'staff' | 'admin' }) {
+export function Sidebar({
+  role,
+}: {
+  role?: 'student' | 'alumni' | 'staff' | 'lecturer' | 'guest' | 'admin';
+}) {
   const pathname = usePathname();
   const items = role === 'staff' || role === 'admin' ? [...NAV, ADMIN_NAV] : NAV;
 
@@ -70,6 +74,14 @@ export function Sidebar({ role }: { role?: 'student' | 'alumni' | 'staff' | 'adm
       </nav>
       <div className="mt-auto px-1 pt-8 text-xs text-neutral/40 font-body leading-relaxed">
         เชื่อมต่อผ่าน CSMJU2030 API Gateway<br />ไม่มีระบบ Login ของตัวเอง
+        <form action="/auth/logout" method="post" className="mt-4">
+          <button
+            type="submit"
+            className="font-body text-sm text-neutral/60 underline underline-offset-2 hover:text-primary"
+          >
+            ออกจากระบบ
+          </button>
+        </form>
       </div>
     </aside>
   );

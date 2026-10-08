@@ -17,12 +17,22 @@ function prismaErrorCode(e: unknown): string | undefined {
 export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(planId?: string) {
-    return this.prisma.course.findMany({
-      where: planId ? { plan_id: planId } : undefined,
-      include: { course_skills: { include: { skill: true } }, plan: true },
-      orderBy: { code: 'asc' },
-    });
+  async findAll(planId?: string, page = 1, limit = 20) {
+    const where = planId ? { plan_id: planId } : undefined;
+    const [courses, total] = await Promise.all([
+      this.prisma.course.findMany({
+        where,
+        include: { course_skills: { include: { skill: true } }, plan: true },
+        orderBy: { code: 'asc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.course.count({ where }),
+    ]);
+    return {
+      data: courses,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findOneOrThrow(id: string) {

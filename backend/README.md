@@ -1,9 +1,9 @@
 # csmju-skillforge — backend
 
 AI Career Skill Analyzer & Portfolio Builder. A **plug-in subsystem** of the
-CSMJU2030 Unified Ecosystem — it has **no login page, no password, and no
-session of its own**. Every request is expected to carry a bearer JWT that
-Core Hub's SSO already issued the user:
+CSMJU2030 Unified Ecosystem — it has **no local login form, no password, and
+no independent session store**. Browser access starts through Core Hub SSO;
+the verified Core Hub access token is kept only in an HttpOnly cookie:
 
 ```
 Authorization: Bearer <token>
@@ -13,8 +13,20 @@ This subsystem verifies that token itself against Core Hub's published JWKS
 (`CORE_HUB_JWKS_URL`, checked with issuer `CORE_HUB_ISSUER` / audience
 `CORE_HUB_AUDIENCE`) — see `src/auth/`. It never issues, stores, or invents a
 token; it only checks the signature/claims on the one the user already has.
-The claims it reads out of the verified token are `username`, `layer1_role`,
-and `faculty` (per Core's Standard JWT Payload Structure).
+The backend verifies `sub`, `role`, issuer, audience, expiration, token age,
+and optional `azp` against the current Core Hub contract. It maps all six Core
+roles to this subsystem's registered roles:
+
+| Core role | SkillForge role |
+|---|---|
+| `student` | `STUDENT` |
+| `alumni` | `ALUMNI` |
+| `staff` | `STAFF` |
+| `lecturer` | `LECTURER` |
+| `guest` | `GUEST` |
+| `admin` | `ADMIN` |
+
+Only `STAFF` and `ADMIN` can manage the shared course catalog.
 
 ## What it does
 
@@ -38,13 +50,23 @@ pnpm run prisma:seed
 pnpm run start:dev             # http://localhost:3002/api/v1
 ```
 
-With `DEV_IDENTITY_FALLBACK=true` in `.env` (the default), any request with no
-`Authorization` header is treated as a fake identity (`DEV_USERNAME`/`DEV_ROLE`/
-`DEV_FACULTY`, all overridable) so you can develop without a real Core Hub
-session in front of it. **Set it to `false` before this subsystem sits behind
-the real Core Hub.**
+Run the backend authentication tests with `pnpm test`. They cover SSO state
+validation, safe return paths, Core role mapping, and access-token restrictions.
 
-## Endpoints (all under `/api/v1`, Standard Envelope `{ success, data, meta }`)
+The frontend runs at `http://localhost:3000` and proxies `/api/*` and `/auth/*`
+to the backend. Opening a protected page starts Core Hub SSO. Local testing
+requires this subsystem to be registered with the matching callback URL and
+role mapping; the backend has no development identity fallback.
+
+## Authentication endpoints (public, outside the API prefix)
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/auth/login?next=` | Generate one-time state and redirect to Core Hub SSO |
+| GET | `/auth/callback` | Validate state and access token, then set the HttpOnly session cookie |
+| POST | `/auth/logout` | Clear subsystem cookies and continue to Core Hub logout |
+
+## API endpoints (under `/api/v1`, Standard Envelope `{ success, data, meta }`)
 
 | Method | Path | Notes |
 |---|---|---|
@@ -69,7 +91,8 @@ forms also require `letter_grade` and `semester` (for example, `2569/1`).
 | POST | `/students/me/llm-settings/models` | list model IDs from the user's OpenAI-compatible provider |
 | POST | `/documents/resume` \| `/cover-letter` \| `/portfolio` | AI-drafted with the student's configured provider; output saved per student |
 | GET | `/students/me/documents`, `/students/me/documents/:id` | generation history |
-| GET | `/identity` | who the verified token says is calling (`username`, `layer1_role`, `faculty`) — used by the frontend to show/hide staff-only UI |
+| GET | `/identity` | verified Core identity, Core role, and mapped SkillForge role |
+| GET | `/me` | current identity and access-token expiry for silent re-SSO |
 | POST/PATCH/DELETE | `/courses` | **staff/admin only** (`StaffOnlyGuard`) — add, edit, or remove a course and its skill mapping |
 
 ## Standards compliance checklist (per CSMJU2030 conventions)

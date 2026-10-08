@@ -1,13 +1,13 @@
 import { ShieldExclamationIcon } from '@heroicons/react/24/outline';
-import { api, tryGet } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { Course, Identity, Skill } from '@/lib/types';
 import { CourseManager } from '@/components/CourseManager';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCoursesPage() {
-  const identity = await tryGet<Identity>('/identity');
-  const isStaff = identity?.layer1_role === 'staff' || identity?.layer1_role === 'admin';
+  const identity = await api.get<Identity>('/identity');
+  const isStaff = identity.subsystem_role === 'STAFF' || identity.subsystem_role === 'ADMIN';
 
   if (!isStaff) {
     return (

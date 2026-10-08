@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { IdentityController } from './identity.controller';
+import { IdentityController, MeController } from './identity.controller';
 
-@Module({ controllers: [IdentityController] })
+@Module({ controllers: [IdentityController, MeController] })
 export class IdentityModule {}

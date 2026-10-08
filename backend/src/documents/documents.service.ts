@@ -29,7 +29,7 @@ export class DocumentsService {
 
   findMine(identity: GatewayIdentity) {
     return this.prisma.generatedDocument.findMany({
-      where: { student_username: identity.username },
+      where: { student_username: identity.coreUserId },
       orderBy: { created_at: 'desc' },
     });
   }
@@ -39,7 +39,7 @@ export class DocumentsService {
       this.gapAnalysis.computeSkillGap(identity),
       this.prisma.grade.findMany({
         where: {
-          student_username: identity.username,
+          student_username: identity.coreUserId,
           letter_grade: { not: 'W' },
         },
         include: { course: true },
@@ -79,7 +79,7 @@ export class DocumentsService {
       .join('\n');
 
     const llmConfig = await this.llmSettings.resolve(
-      identity.username,
+      identity.coreUserId,
       dto.llm_config,
     );
     const content = await this.llm.complete(system, userPrompt, llmConfig);
@@ -123,7 +123,7 @@ export class DocumentsService {
       .join('\n');
 
     const llmConfig = await this.llmSettings.resolve(
-      identity.username,
+      identity.coreUserId,
       dto.llm_config,
     );
     const content = await this.llm.complete(system, userPrompt, llmConfig);
@@ -166,7 +166,7 @@ export class DocumentsService {
       .join('\n');
 
     const llmConfig = await this.llmSettings.resolve(
-      identity.username,
+      identity.coreUserId,
       dto.llm_config,
     );
     const content = await this.llm.complete(system, userPrompt, llmConfig);
@@ -187,13 +187,13 @@ export class DocumentsService {
     targetRole?: string,
   ) {
     await this.prisma.student.upsert({
-      where: { username: identity.username },
+      where: { username: identity.coreUserId },
       update: {},
-      create: { username: identity.username },
+      create: { username: identity.coreUserId },
     });
     return this.prisma.generatedDocument.create({
       data: {
-        student_username: identity.username,
+        student_username: identity.coreUserId,
         doc_type: docType,
         title,
         content_markdown: content,
@@ -206,7 +206,7 @@ export class DocumentsService {
     const doc = await this.prisma.generatedDocument.findUnique({
       where: { id },
     });
-    if (!doc || doc.student_username !== identity.username) {
+    if (!doc || doc.student_username !== identity.coreUserId) {
       throw new NotFoundException('Document not found');
     }
     return doc;
@@ -296,9 +296,9 @@ export class DocumentsService {
 
       // 3. จัดการบันทึกข้อมูลเข้าสู่ฐานข้อมูลด้วย Prisma
       await this.prisma.student.upsert({
-        where: { username: identity.username },
+        where: { username: identity.coreUserId },
         update: {},
-        create: { username: identity.username },
+        create: { username: identity.coreUserId },
       });
 
       for (const item of extractedCourses) {
@@ -318,7 +318,7 @@ export class DocumentsService {
         // ตรวจสอบเกรดเดิมของวิชาในภาคการศึกษาเดียวกัน
         const existingGrade = await this.prisma.grade.findFirst({
           where: {
-            student_username: identity.username,
+            student_username: identity.coreUserId,
             course_id: course.id,
             semester: item.semester,
           },
@@ -334,7 +334,7 @@ export class DocumentsService {
           // หากไม่เคยเรียนวิชานี้มาก่อน ให้สร้างบันทึกเกรดใหม่เข้าระบบ
           await this.prisma.grade.create({
             data: {
-              student_username: identity.username,
+              student_username: identity.coreUserId,
               course_id: course.id,
               letter_grade: item.grade,
               semester: item.semester,
@@ -345,7 +345,7 @@ export class DocumentsService {
 
       return {
         success: true,
-        studentName: identity.username,
+        studentName: identity.coreUserId,
         coursesExtractedCount: extractedCourses.length,
       };
     } catch (error: any) {

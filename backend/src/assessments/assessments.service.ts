@@ -10,7 +10,7 @@ export class AssessmentsService {
   history(identity: GatewayIdentity, careerPathId?: string) {
     return this.prisma.assessmentAttempt.findMany({
       where: {
-        student_username: identity.username,
+        student_username: identity.coreUserId,
         ...(careerPathId ? { career_path_id: careerPathId } : {}),
       },
       select: {
@@ -41,7 +41,7 @@ export class AssessmentsService {
 
     return this.prisma.assessmentAttempt.create({
       data: {
-        student_username: identity.username,
+        student_username: identity.coreUserId,
         career_path_id: careerPath.id,
         score: dto.score,
         total_questions: dto.total_questions,

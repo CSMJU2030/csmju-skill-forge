@@ -1,21 +1,25 @@
 # csmju-skillforge — frontend
 
 Next.js (App Router) + Tailwind UI for SkillForge. Talks only to this
-subsystem's own backend (`NEXT_PUBLIC_API_BASE_URL`), never to the Core Hub or
-any database directly.
+subsystem's own backend through same-origin rewrites, never to Core Hub or any
+database directly.
 
-This app has no login page, no session, and no auth logic of its own — see
-`src/lib/api.ts` for how it relays whatever bearer token Core Hub's SSO
-session provides (not yet wired up; see the top-level README's "still to add"
-list) and how local dev works without one.
+Authentication starts through Core Hub SSO. Backend-issued HttpOnly cookies
+hold the verified access token; frontend code never reads or stores it.
+Unauthenticated page navigation and API `401` responses start a top-level
+reauthentication flow.
 
 ## Run locally
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 pnpm install
 pnpm run dev     # http://localhost:3000
 ```
+
+The backend must be running on `http://127.0.0.1:3002`; use
+`SUBSYSTEM_ID=csmju-skill-forge` in both environments and register the matching
+callback URL and role mapping in Core Hub.
 
 ## Pages
 

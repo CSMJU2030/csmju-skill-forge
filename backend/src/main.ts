@@ -7,14 +7,20 @@
 import 'dotenv/config';
 
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // api-conventions.md: all endpoints live under /api/v1, kebab-case, plural nouns.
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1', {
+    exclude: [
+      { path: 'auth/login', method: RequestMethod.GET },
+      { path: 'auth/callback', method: RequestMethod.GET },
+      { path: 'auth/logout', method: RequestMethod.POST },
+    ],
+  });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   // Core Rule: Frontend never talks to the database directly, only to this API —

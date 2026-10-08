@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { MapIcon, ChartBarIcon, SparklesIcon } from '@heroicons/react/24/outline';
-import { api } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { CareerPath, SkillGapResult, Student } from '@/lib/types';
 import { ReadinessGauge } from '@/components/ReadinessGauge';
 import { StatusBadge } from '@/components/StatusBadge';

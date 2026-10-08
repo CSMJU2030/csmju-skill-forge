@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -12,12 +12,18 @@ export class CoursesController {
   constructor(private readonly service: CoursesService) {}
 
   @Get()
-  findAll(@Query('plan_id') planId?: string) {
-    return this.service.findAll(planId);
+  findAll(
+    @Query('plan_id') planId?: string,
+    @Query('page') pageValue?: string,
+    @Query('limit') limitValue?: string,
+  ) {
+    const page = this.parsePaginationValue('page', pageValue, 1, Number.MAX_SAFE_INTEGER);
+    const limit = this.parsePaginationValue('limit', limitValue, 20, 100);
+    return this.service.findAll(planId, page, limit);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.service.findOneOrThrow(id);
   }
 
@@ -37,5 +43,17 @@ export class CoursesController {
   @UseGuards(StaffOnlyGuard)
   remove(@Param('id') id: string) {
     return this.service.remove(id);
+  }
+
+  private parsePaginationValue(name: string, value: string | undefined, defaultValue: number, max: number) {
+    if (value === undefined) return defaultValue;
+    if (!/^[1-9]\d*$/.test(value)) {
+      throw new BadRequestException({ message: [`${name} must be a positive integer`] });
+    }
+    const parsed = Number(value);
+    if (!Number.isSafeInteger(parsed) || parsed > max) {
+      throw new BadRequestException({ message: [`${name} must be between 1 and ${max}`] });
+    }
+    return parsed;
   }
 }

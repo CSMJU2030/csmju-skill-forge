@@ -11,9 +11,9 @@ export class StudentsService {
   // they're re-read from the Gateway headers on every request (data-dictionary.md).
   async getOrCreate(identity: GatewayIdentity) {
     return this.prisma.student.upsert({
-      where: { username: identity.username },
+      where: { username: identity.coreUserId },
       update: {},
-      create: { username: identity.username },
+      create: { username: identity.coreUserId },
       include: { target_career_path: true },
     });
   }
@@ -21,7 +21,7 @@ export class StudentsService {
   async setTargetCareerPath(identity: GatewayIdentity, careerPathId: string) {
     await this.getOrCreate(identity);
     return this.prisma.student.update({
-      where: { username: identity.username },
+      where: { username: identity.coreUserId },
       data: { target_career_path_id: careerPathId },
       include: { target_career_path: true },
     });

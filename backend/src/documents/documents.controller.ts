@@ -27,7 +27,7 @@ export class DocumentsController {
 
   @Get('students/me/llm-settings')
   findLlmSettings(@Identity() identity: GatewayIdentity) {
-    return this.llmSettings.findMine(identity.username);
+    return this.llmSettings.findMine(identity.coreUserId);
   }
 
   @Put('students/me/llm-settings')
@@ -35,12 +35,12 @@ export class DocumentsController {
     @Identity() identity: GatewayIdentity,
     @Body() dto: SaveLlmSettingsDto,
   ) {
-    return this.llmSettings.save(identity.username, dto);
+    return this.llmSettings.save(identity.coreUserId, dto);
   }
 
   @Delete('students/me/llm-settings')
   deleteLlmSettings(@Identity() identity: GatewayIdentity) {
-    return this.llmSettings.remove(identity.username);
+    return this.llmSettings.remove(identity.coreUserId);
   }
 
   @Post('students/me/llm-settings/models')
@@ -50,7 +50,7 @@ export class DocumentsController {
   ) {
     if (!dto.base_url && !dto.api_key) {
       return this.llmSettings
-        .resolve(identity.username)
+        .resolve(identity.coreUserId)
         .then(({ base_url, api_key }) =>
           this.llm.listModels({ base_url, api_key }),
         );

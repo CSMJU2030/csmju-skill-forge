@@ -1,4 +1,4 @@
-import { api } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { ProjectIdea } from '@/lib/types';
 import { EmptyState } from '@/components/EmptyState';
 

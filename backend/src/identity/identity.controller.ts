@@ -11,9 +11,23 @@ export class IdentityController {
   @Get()
   whoAmI(@Identity() identity: GatewayIdentity) {
     return {
-      username: identity.username,
+      core_user_id: identity.coreUserId,
+      email: identity.email,
       layer1_role: identity.layer1Role,
-      faculty: identity.faculty,
+      subsystem_role: identity.subsystemRole,
+    };
+  }
+}
+
+@Controller('me')
+export class MeController {
+  @Get()
+  whoAmI(@Identity() identity: GatewayIdentity) {
+    return {
+      id: identity.coreUserId,
+      coreRole: identity.layer1Role,
+      subsystemRole: identity.subsystemRole,
+      session: { expiresAt: identity.expiresAt },
     };
   }
 }

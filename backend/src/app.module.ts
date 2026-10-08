@@ -44,8 +44,10 @@ import { JwtIdentityMiddleware } from './auth/jwt-identity.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // Applied to every route except /health, which must stay reachable with no
-    // identity at all so the Core/orchestrator can always poll it.
-    consumer.apply(JwtIdentityMiddleware).exclude('health').forRoutes('*');
+    // Health and SSO handoff routes must remain reachable without an identity.
+    consumer
+      .apply(JwtIdentityMiddleware)
+      .exclude('health', 'auth/login', 'auth/callback', 'auth/logout')
+      .forRoutes('*');
   }
 }

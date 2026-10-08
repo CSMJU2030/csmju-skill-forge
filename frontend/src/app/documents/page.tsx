@@ -1,4 +1,4 @@
-import { api } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { GeneratedDocument } from '@/lib/types';
 import { DocumentGenerator } from '@/components/DocumentGenerator';
 

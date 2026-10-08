@@ -1,4 +1,4 @@
-import { api } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { Roadmap } from '@/lib/types';
 import { RouteMilestone } from '@/components/RouteMilestone';
 import { EmptyState } from '@/components/EmptyState';

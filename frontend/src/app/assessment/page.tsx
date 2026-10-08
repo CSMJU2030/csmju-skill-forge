@@ -1,5 +1,5 @@
 import { AssessmentWorkspace } from '@/components/AssessmentWorkspace';
-import { api } from '@/lib/api';
+import { serverApi as api } from '@/lib/server-api';
 import { AssessmentAttempt, CareerPath, Student } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';

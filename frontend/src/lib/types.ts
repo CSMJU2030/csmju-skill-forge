@@ -6,9 +6,10 @@ export interface Envelope<T> {
 }
 
 export interface Identity {
-  username: string;
-  layer1_role: 'student' | 'alumni' | 'staff' | 'admin';
-  faculty: string;
+  core_user_id: string;
+  email?: string;
+  layer1_role: 'student' | 'alumni' | 'staff' | 'lecturer' | 'guest' | 'admin';
+  subsystem_role: 'STUDENT' | 'ALUMNI' | 'STAFF' | 'LECTURER' | 'GUEST' | 'ADMIN';
 }
 
 export interface Skill {

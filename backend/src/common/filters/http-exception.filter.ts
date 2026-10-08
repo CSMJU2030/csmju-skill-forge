@@ -12,7 +12,44 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-    const message = exception instanceof HttpException ? exception.getResponse() : 'Internal server error';
+    const exceptionResponse = exception instanceof HttpException ? exception.getResponse() : undefined;
+    const responseObject =
+      typeof exceptionResponse === 'object' && exceptionResponse !== null
+        ? exceptionResponse as { message?: unknown }
+        : undefined;
+    const validationDetails = Array.isArray(responseObject?.message)
+      ? responseObject.message.map(String)
+      : undefined;
+    const message =
+      status >= 500
+        ? 'Internal server error'
+        : validationDetails
+          ? 'Request validation failed'
+          : typeof exceptionResponse === 'string'
+            ? exceptionResponse
+            : typeof responseObject?.message === 'string'
+              ? responseObject.message
+              : 'Request failed';
+    const code =
+      status === 400
+        ? validationDetails ? 'VALIDATION_ERROR' : 'BAD_REQUEST'
+        : status === 401
+          ? 'UNAUTHORIZED'
+          : status === 403
+            ? 'FORBIDDEN'
+            : status === 404
+              ? 'NOT_FOUND'
+              : status === 409
+                ? 'CONFLICT'
+                : status === 429
+                  ? 'TOO_MANY_REQUESTS'
+                  : status === 503
+                    ? 'SERVICE_UNAVAILABLE'
+                    : 'INTERNAL_ERROR';
+
+    if (status === 429 || status === 503) {
+      response.setHeader('Retry-After', '1');
+    }
 
     // Unexpected (non-HttpException) errors are hidden from the client, so they
     // MUST be logged here or the real cause (e.g. a missing DB table) is invisible.
@@ -28,8 +65,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       data: null,
       meta: {},
       error: {
+        code,
         status_code: status,
-        message: typeof message === 'string' ? message : (message as any).message ?? message,
+        message,
+        ...(validationDetails ? { details: validationDetails } : {}),
       },
     });
   }
