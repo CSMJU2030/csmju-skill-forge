@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MapIcon, ChartBarIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { BarChart3, Map, Sparkles } from 'lucide-react';
 import { serverApi as api } from '@/lib/server-api';
 import { CareerPath, SkillGapResult, Student } from '@/lib/types';
 import { ReadinessGauge } from '@/components/ReadinessGauge';
@@ -25,7 +25,7 @@ export default async function DashboardPage() {
           <HubMotif className="-left-20 -bottom-20 h-72 w-72" />
           <div className="relative">
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-secondary">
-              <SparklesIcon className="h-6 w-6 text-primary" strokeWidth={1.6} />
+              <Sparkles className="h-6 w-6 text-primary" strokeWidth={1.6} />
             </div>
             <h3 className="font-display font-semibold text-xl text-primary mb-2">ยังไม่ได้เลือกเส้นทางอาชีพ</h3>
             <p className="font-body text-sm text-neutral/60 mb-7 max-w-md mx-auto">
@@ -63,10 +63,10 @@ export default async function DashboardPage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/roadmap" className="font-body text-sm font-medium rounded-module bg-white text-primary-deep px-4 py-2.5 hover:bg-secondary transition-colors flex items-center gap-2">
-              <MapIcon className="h-4 w-4" strokeWidth={2} /> ดู Roadmap
+              <Map className="h-4 w-4" strokeWidth={2} /> ดู Roadmap
             </Link>
             <Link href="/skills" className="font-body text-sm font-medium rounded-module border border-white/30 px-4 py-2.5 hover:bg-white/10 transition-colors flex items-center gap-2">
-              <ChartBarIcon className="h-4 w-4" strokeWidth={2} /> ดูทักษะทั้งหมด
+              <BarChart3 className="h-4 w-4" strokeWidth={2} /> ดูทักษะทั้งหมด
             </Link>
           </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Listbox } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { autoUpdate, flip, offset, shift, size, useFloating } from '@floating-ui/react-dom';
@@ -76,7 +76,7 @@ export function Select({
         <span className="truncate">
           {options.length === 0 ? 'ยังไม่มีข้อมูล' : selected?.label ?? placeholder}
         </span>
-        <ChevronUpDownIcon className="h-4 w-4 shrink-0 text-neutral/40" aria-hidden="true" />
+        <ChevronsUpDown className="h-4 w-4 shrink-0 text-neutral/40" aria-hidden="true" />
       </Listbox.Button>
 
       {mounted &&
@@ -102,7 +102,7 @@ export function Select({
                       <span className="block">{opt.label}</span>
                       {opt.hint && <span className="block text-xs text-neutral/50 mt-0.5">{opt.hint}</span>}
                     </span>
-                    {isSelected && <CheckIcon className="h-4 w-4 shrink-0 text-primary mt-0.5" aria-hidden="true" />}
+                    {isSelected && <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" aria-hidden="true" />}
                   </>
                 )}
               </Listbox.Option>

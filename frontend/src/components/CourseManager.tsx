@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PlusIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { Course, Skill } from '@/lib/types';
 import { CourseForm } from './CourseForm';
@@ -59,7 +59,7 @@ export function CourseManager({ courses, skills }: { courses: Course[]; skills: 
             onClick={startCreate}
             className="font-body text-sm font-medium rounded-module bg-primary text-white px-4 py-2 hover:bg-primary-deep transition-colors flex items-center gap-1.5"
           >
-            <PlusIcon className="h-4 w-4" /> เพิ่มวิชาใหม่
+            <Plus className="h-4 w-4" /> เพิ่มวิชาใหม่
           </button>
         )}
       </div>
@@ -114,14 +114,14 @@ export function CourseManager({ courses, skills }: { courses: Course[]; skills: 
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
                     <button onClick={() => startEdit(c)} className="p-1.5 text-neutral/40 hover:text-primary rounded-module hover:bg-secondary transition-colors">
-                      <PencilSquareIcon className="h-4 w-4" />
+                      <Pencil className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(c)}
                       disabled={deletingId === c.id}
                       className="p-1.5 text-neutral/40 hover:text-gap rounded-module hover:bg-secondary transition-colors disabled:opacity-40"
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </td>

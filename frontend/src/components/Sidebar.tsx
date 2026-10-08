@@ -3,29 +3,29 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  HomeIcon,
-  MapIcon,
-  ChartBarIcon,
-  AcademicCapIcon,
-  ClipboardDocumentCheckIcon,
-  BriefcaseIcon,
-  DocumentTextIcon,
-  Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
+  BarChart3,
+  Briefcase,
+  ClipboardCheck,
+  FileText,
+  GraduationCap,
+  Home,
+  Map,
+  Settings,
+} from 'lucide-react';
 
 // Styled after the "Subsystem Registry" module from the CSMJU2030 blueprint —
 // each nav item reads as a plugged-in module off the Core, not a generic sidebar.
 const NAV = [
-  { href: '/dashboard', label: 'ภาพรวม', sub: 'Dashboard', icon: HomeIcon },
-  { href: '/roadmap', label: 'เส้นทางอาชีพ', sub: 'Roadmap', icon: MapIcon },
-  { href: '/skills', label: 'จุดแข็ง / จุดพัฒนา', sub: 'Skill gap', icon: ChartBarIcon },
-  { href: '/certificates', label: 'ใบรับรองฟรี', sub: 'Certificates', icon: AcademicCapIcon },
-  { href: '/assessment', label: 'ทดสอบทักษะ', sub: 'Skill assessment', icon: ClipboardDocumentCheckIcon },
-  { href: '/projects', label: 'ผลงานที่ควรทำ', sub: 'Projects', icon: BriefcaseIcon },
-  { href: '/documents', label: 'เรซูเม่ / จดหมาย', sub: 'Documents', icon: DocumentTextIcon },
+  { href: '/dashboard', label: 'ภาพรวม', sub: 'Dashboard', icon: Home },
+  { href: '/roadmap', label: 'เส้นทางอาชีพ', sub: 'Roadmap', icon: Map },
+  { href: '/skills', label: 'จุดแข็ง / จุดพัฒนา', sub: 'Skill gap', icon: BarChart3 },
+  { href: '/certificates', label: 'ใบรับรองฟรี', sub: 'Certificates', icon: GraduationCap },
+  { href: '/assessment', label: 'ทดสอบทักษะ', sub: 'Skill assessment', icon: ClipboardCheck },
+  { href: '/projects', label: 'ผลงานที่ควรทำ', sub: 'Projects', icon: Briefcase },
+  { href: '/documents', label: 'เรซูเม่ / จดหมาย', sub: 'Documents', icon: FileText },
 ];
 
-const ADMIN_NAV = { href: '/admin/courses', label: 'จัดการวิชา', sub: 'Course catalog (staff)', icon: Cog6ToothIcon };
+const ADMIN_NAV = { href: '/admin/courses', label: 'จัดการวิชา', sub: 'Course catalog (staff)', icon: Settings };
 
 export function Sidebar({
   role,

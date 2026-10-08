@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Plus, X } from 'lucide-react';
 import { api } from '@/lib/api';
 import { Course, Skill } from '@/lib/types';
 import { Select } from './ui/Select';
@@ -115,7 +115,7 @@ export function CourseForm({
             disabled={rows.length >= skills.length}
             className="font-body text-xs flex items-center gap-1 text-primary hover:text-primary-deep disabled:opacity-40"
           >
-            <PlusIcon className="h-3.5 w-3.5" /> เพิ่มทักษะ
+            <Plus className="h-3.5 w-3.5" /> เพิ่มทักษะ
           </button>
         </div>
         {rows.length === 0 ? (
@@ -142,7 +142,7 @@ export function CourseForm({
                   title="น้ำหนัก 0-1"
                 />
                 <button type="button" onClick={() => removeRow(i)} className="p-2 text-neutral/40 hover:text-gap">
-                  <XMarkIcon className="h-4 w-4" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             ))}

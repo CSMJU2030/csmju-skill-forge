@@ -1,4 +1,4 @@
-import { ShieldExclamationIcon } from '@heroicons/react/24/outline';
+import { ShieldAlert } from 'lucide-react';
 import { serverApi as api } from '@/lib/server-api';
 import { Course, Identity, Skill } from '@/lib/types';
 import { CourseManager } from '@/components/CourseManager';
@@ -14,7 +14,7 @@ export default async function AdminCoursesPage() {
       <div>
         <Header />
         <div className="rounded-module border border-secondary bg-white px-8 py-14 text-center">
-          <ShieldExclamationIcon className="h-8 w-8 text-gap mx-auto mb-3" strokeWidth={1.6} />
+          <ShieldAlert className="h-8 w-8 text-gap mx-auto mb-3" strokeWidth={1.6} />
           <h3 className="font-display font-semibold text-lg text-neutral mb-2">ไม่มีสิทธิ์เข้าถึงหน้านี้</h3>
           <p className="font-body text-sm text-neutral/60 max-w-md mx-auto">
             การจัดการวิชา/ทักษะเป็นสิทธิ์ของบัญชีสาขา (staff/admin) เท่านั้น — ไม่ใช่บัญชีนักศึกษารายบุคคล

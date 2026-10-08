@@ -14,7 +14,7 @@
     "react-dom": "^18.3.1",
     "@floating-ui/react-dom": "^2.1.1",
     "@headlessui/react": "^2.1.2",
-    "@heroicons/react": "^2.1.5"
+    "lucide-react": "^0.468.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

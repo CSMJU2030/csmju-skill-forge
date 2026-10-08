@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  DocumentArrowUpIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { FileUp, Pencil, Trash2, X } from 'lucide-react';
 import { api, uploadTranscriptPdf } from '@/lib/api';
 import { Grade } from '@/lib/types';
 import { Select } from './ui/Select';
@@ -297,7 +292,7 @@ export function GradeEntryForm({ grades: initialGrades }: { grades: Grade[] }) {
           {scanning ? (
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
-            <DocumentArrowUpIcon className="h-5 w-5" />
+            <FileUp className="h-5 w-5" />
           )}
           {scanning ? 'กำลังสแกน PDF…' : 'นำเข้าเกรดจาก PDF'}
           <input
@@ -331,7 +326,7 @@ export function GradeEntryForm({ grades: initialGrades }: { grades: Grade[] }) {
                 onClick={resetForm}
                 className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-body text-xs font-medium text-neutral/65 transition-colors hover:bg-white hover:text-neutral"
               >
-                <XMarkIcon className="h-4 w-4" />
+                <X className="h-4 w-4" />
                 ยกเลิก
               </button>
             )}
@@ -443,7 +438,7 @@ export function GradeEntryForm({ grades: initialGrades }: { grades: Grade[] }) {
                   disabled={busy}
                   className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-gap px-4 font-body text-sm font-semibold text-white transition-colors hover:bg-gap/90 disabled:opacity-50"
                 >
-                  <TrashIcon className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" />
                   ลบที่เลือก ({selectedIds.size})
                 </button>
               )}
@@ -533,7 +528,7 @@ export function GradeEntryForm({ grades: initialGrades }: { grades: Grade[] }) {
                             aria-label={`แก้ไขเกรดวิชา ${grade.course.code}`}
                             className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-secondary px-3.5 font-body text-xs font-medium text-neutral/70 transition-colors hover:border-primary/25 hover:bg-primary/5 hover:text-primary disabled:opacity-50"
                           >
-                            <PencilSquareIcon className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" />
                             แก้ไข
                           </button>
                           <button
@@ -543,7 +538,7 @@ export function GradeEntryForm({ grades: initialGrades }: { grades: Grade[] }) {
                             aria-label={`ลบเกรดวิชา ${grade.course.code}`}
                             className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-gap/15 px-3.5 font-body text-xs font-medium text-gap/80 transition-colors hover:bg-gap/5 disabled:opacity-50"
                           >
-                            <TrashIcon className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4" />
                             {deletingIds.has(grade.id) ? 'กำลังลบ…' : 'ลบ'}
                           </button>
                         </div>

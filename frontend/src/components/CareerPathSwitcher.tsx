@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { Pencil } from 'lucide-react';
 import { api } from '@/lib/api';
 import { CareerPath } from '@/lib/types';
 import { Select } from './ui/Select';
@@ -31,7 +31,7 @@ export function CareerPathSwitcher({
           onClick={() => setEditing(true)}
           className="font-body text-xs text-white/70 hover:text-white flex items-center gap-1 rounded-full border border-white/25 px-2.5 py-1 transition-colors"
         >
-          <PencilSquareIcon className="h-3.5 w-3.5" /> เปลี่ยนเส้นทาง
+          <Pencil className="h-3.5 w-3.5" /> เปลี่ยนเส้นทาง
         </button>
       </div>
     );

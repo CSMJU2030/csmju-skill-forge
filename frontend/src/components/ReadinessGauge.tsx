@@ -9,13 +9,14 @@ export function ReadinessGauge({ percent, label }: { percent: number; label: str
   return (
     <div className="relative flex h-40 w-40 items-center justify-center shrink-0">
       <svg viewBox="0 0 160 160" className="h-40 w-40 -rotate-90">
-        <circle cx="80" cy="80" r={radius} fill="none" stroke="#E6F2FF" strokeWidth="12" />
+        <circle cx="80" cy="80" r={radius} fill="none" stroke="currentColor" className="text-secondary" strokeWidth="12" />
         <circle
           cx="80"
           cy="80"
           r={radius}
           fill="none"
-          stroke="#004C99"
+          stroke="currentColor"
+          className="text-primary"
           strokeWidth="12"
           strokeLinecap="round"
           strokeDasharray={circumference}
