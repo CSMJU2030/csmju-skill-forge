@@ -26,6 +26,7 @@
     "dotenv": "^16.4.5",
     "jose": "^4.15.9",
     "pdf-parse": "^2.4.5",
+    "prisma": "5.19.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -36,7 +37,6 @@
     "@types/node": "^20.14.0",
     "@types/pdf-parse": "^1.1.5",
     "eslint": "^9.35.0",
-    "prisma": "5.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.46.0"

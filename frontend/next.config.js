@@ -19,6 +19,7 @@ for (const variable of ['SUBSYSTEM_ID', 'NEXT_PUBLIC_SUBSYSTEM_ID']) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'standalone',
   distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
   env: {
     SUBSYSTEM_ID: subsystemId,

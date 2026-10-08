@@ -22,6 +22,19 @@ The backend must be running on `http://127.0.0.1:3002`; use
 callback URL and role mapping in Core Hub. The frontend reads its subsystem ID
 from the root `subsystem.yaml`; optional environment overrides must match it.
 
+## Container image
+
+Build from the repository root:
+
+```bash
+docker build -f frontend/Dockerfile -t csmju-skill-forge-web .
+```
+
+The image runs Next.js in standalone mode on port `3000`. `BACKEND_URL` is a
+build-time setting for the `/api/*` and `/auth/*` rewrites; its default,
+`http://api:4000`, expects the backend service to be named `api` on the same
+container network.
+
 ## Pages
 
 | Route | What it shows |

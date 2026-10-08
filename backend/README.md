@@ -53,6 +53,20 @@ pnpm run start:dev             # http://localhost:3002/api/v1
 Run the backend authentication tests with `pnpm test`. They cover SSO state
 validation, safe return paths, Core role mapping, and access-token restrictions.
 
+## Container image
+
+Build from the repository root so the Dockerfile can access the pnpm workspace
+lockfile:
+
+```bash
+docker build -f backend/Dockerfile -t csmju-skill-forge-api .
+```
+
+At runtime, provide the backend's normal environment (including `DATABASE_URL`
+and the `CORE_HUB_*` settings). The image listens on port `4000`, applies
+committed Prisma migrations before starting, and exposes `/api/v1/health` as
+its health check. Do not put runtime secrets in Docker build arguments.
+
 The frontend runs at `http://localhost:3000` and proxies `/api/*` and `/auth/*`
 to the backend. Opening a protected page starts Core Hub SSO. Local testing
 requires this subsystem to be registered with the matching callback URL and
