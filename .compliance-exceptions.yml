@@ -1,0 +1,13 @@
+# ข้อยกเว้นที่ PM/DevOps อนุมัติ 9 ต.ค. 2569 · บันทึกที่ csmju2030-standards#58 (ci-compliance-spec ข้อ 11.1)
+# แก้ได้เฉพาะเมื่อ DevOps approve · ทุกรายการต้องมี issue และ expires · ห้าม scope "*"
+
+version: 1
+
+exceptions:
+  - check: ARC-02
+    scope: "backend/package.json"
+    dependency: "pdf-parse"
+    reason: "อ่านข้อความจาก PDF ใบแสดงผลการเรียนที่นักศึกษาอัปโหลดเอง · whitelist v1.8.4 ไม่มีตัวอ่าน PDF"
+    approved_by: ["@Pimma783"]
+    issue: "csmju2030-standards#58"
+    expires: "2027-03-31"

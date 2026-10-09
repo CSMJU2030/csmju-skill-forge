@@ -1,0 +1,210 @@
+// csmju-skillforge — Database-per-Subsystem (per data-dictionary.md / Core Rule).
+// Shared identity fields (username, layer1_role, faculty) are NEVER duplicated as
+// foreign-keyed user tables here — they are read fresh from the JWT-derived Gateway
+// headers on every request. Only this subsystem's local data lives in this schema.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Curriculum ----------
+
+model CurriculumPlan {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  courses     Course[]
+  created_at  DateTime @default(now())
+
+  @@map("curriculum_plans")
+}
+
+model Course {
+  id            String          @id @default(uuid())
+  code          String          @unique
+  name_th       String
+  name_en       String
+  credits       Int
+  category      String
+  plan_id       String?
+  plan          CurriculumPlan? @relation(fields: [plan_id], references: [id])
+  course_skills CourseSkill[]
+  grades        Grade[]
+  created_at    DateTime        @default(now())
+
+  @@map("courses")
+}
+
+// ---------- Skills ----------
+
+model Skill {
+  id                 String             @id @default(uuid())
+  name               String             @unique
+  category           String
+  description        String?
+  course_skills      CourseSkill[]
+  career_path_skills CareerPathSkill[]
+  certificates       CertificateSkill[]
+  project_ideas      ProjectIdeaSkill[]
+  created_at         DateTime           @default(now())
+
+  @@map("skills")
+}
+
+model CourseSkill {
+  course_id String
+  skill_id  String
+  weight    Float  @default(1.0)
+  course    Course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  skill     Skill  @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@id([course_id, skill_id])
+  @@map("course_skills")
+}
+
+// ---------- Career paths ----------
+
+model CareerPath {
+  id          String            @id @default(uuid())
+  name        String            @unique
+  description String?
+  skills      CareerPathSkill[]
+  students    Student[]
+  assessment_attempts AssessmentAttempt[]
+  created_at  DateTime          @default(now())
+
+  @@map("career_paths")
+}
+
+model CareerPathSkill {
+  career_path_id   String
+  skill_id         String
+  importance_level Int        @default(3)
+  career_path      CareerPath @relation(fields: [career_path_id], references: [id], onDelete: Cascade)
+  skill            Skill      @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@id([career_path_id, skill_id])
+  @@map("career_path_skills")
+}
+
+model AssessmentAttempt {
+  id               String     @id @default(uuid())
+  student_username String
+  career_path_id   String
+  score            Int
+  total_questions  Int
+  created_at       DateTime   @default(now())
+  career_path      CareerPath @relation(fields: [career_path_id], references: [id], onDelete: Cascade)
+
+  @@index([student_username, career_path_id, created_at])
+  @@map("assessment_attempts")
+}
+
+// ---------- Student ----------
+
+model Student {
+  username               String              @id
+  target_career_path_id  String?
+  target_career_path     CareerPath?         @relation(fields: [target_career_path_id], references: [id])
+  grades                 Grade[]
+  documents               GeneratedDocument[]
+  llm_credential         LlmCredential?
+  created_at              DateTime            @default(now())
+  updated_at              DateTime            @updatedAt
+
+  @@map("students")
+}
+
+model LlmCredential {
+  student_username String   @id
+  base_url         String
+  model            String
+  encrypted_key    String   @db.Text
+  retention_mode   String
+  expires_at       DateTime?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  student          Student  @relation(fields: [student_username], references: [username], onDelete: Cascade)
+
+  @@map("llm_credentials")
+}
+
+model Grade {
+  id               String   @id @default(uuid())
+  student_username String
+  course_id        String
+  letter_grade     String
+  semester         String
+  student          Student  @relation(fields: [student_username], references: [username], onDelete: Cascade)
+  course           Course   @relation(fields: [course_id], references: [id])
+  created_at       DateTime @default(now())
+
+  @@unique([student_username, course_id, semester])
+  @@map("grades")
+}
+
+// ---------- Certificates & project ideas ----------
+
+model Certificate {
+  id           String             @id @default(uuid())
+  name         String
+  provider     String
+  url          String
+  is_free      Boolean            @default(true)
+  effort_hours Int?
+  skills       CertificateSkill[]
+  created_at   DateTime           @default(now())
+
+  @@map("certificates")
+}
+
+model CertificateSkill {
+  certificate_id String
+  skill_id       String
+  certificate    Certificate @relation(fields: [certificate_id], references: [id], onDelete: Cascade)
+  skill          Skill       @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@id([certificate_id, skill_id])
+  @@map("certificate_skills")
+}
+
+model ProjectIdea {
+  id          String             @id @default(uuid())
+  title       String
+  description String
+  difficulty  String
+  skills      ProjectIdeaSkill[]
+  created_at  DateTime           @default(now())
+
+  @@map("project_ideas")
+}
+
+model ProjectIdeaSkill {
+  project_idea_id String
+  skill_id        String
+  project_idea    ProjectIdea @relation(fields: [project_idea_id], references: [id], onDelete: Cascade)
+  skill           Skill       @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@id([project_idea_id, skill_id])
+  @@map("project_idea_skills")
+}
+
+// ---------- Generated documents ----------
+
+model GeneratedDocument {
+  id               String   @id @default(uuid())
+  student_username String
+  doc_type         String
+  title            String
+  content_markdown String   @db.Text
+  target_role      String?
+  student          Student  @relation(fields: [student_username], references: [username], onDelete: Cascade)
+  created_at       DateTime @default(now())
+
+  @@map("generated_documents")
+}

@@ -3,7 +3,7 @@
 SkillForge — ระบบย่อยของโครงการ CSMJU2030
 
 มาตรฐานกลางอยู่ใน `standards/` (submodule ของ CSMJU2030/csmju2030-standards)
-สร้างจาก standards v1.0.0
+สร้างจาก standards v1.8.4
 
 ## เริ่มทำงาน
 

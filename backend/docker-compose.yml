@@ -1,0 +1,17 @@
+# Local-only Postgres for this subsystem (Database-per-Subsystem rule — this is
+# NOT shared with any other CSMJU2030 subsystem or the Core).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: csmju_skillforge
+    ports:
+      - "5434:5432"
+    volumes:
+      - skillforge_pgdata:/var/lib/postgresql/data
+
+volumes:
+  skillforge_pgdata:
