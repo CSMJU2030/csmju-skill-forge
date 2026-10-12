@@ -6,6 +6,7 @@ import {
   BarChart3,
   Briefcase,
   ClipboardCheck,
+  ArrowLeft,
   FileText,
   GraduationCap,
   Home,
@@ -36,7 +37,7 @@ export function Sidebar({
   const items = role === 'staff' || role === 'admin' ? [...NAV, ADMIN_NAV] : NAV;
 
   return (
-    <aside className="hidden md:flex md:w-64 flex-col border-r border-secondary bg-white px-5 py-8 shrink-0">
+    <aside className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-64 md:overflow-y-auto flex-col border-r border-secondary bg-white px-5 py-8 shrink-0">
       <div className="mb-10 px-1 flex items-center gap-2.5">
         <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center shrink-0">
           <div className="h-3.5 w-3.5 rounded-full bg-white" />
@@ -73,6 +74,13 @@ export function Sidebar({
         })}
       </nav>
       <div className="mt-auto px-1 pt-8 text-xs text-neutral/40 font-body leading-relaxed">
+        <a
+          href="https://csmju2030.jowave.com/"
+          className="mb-4 flex items-center justify-center gap-2 rounded-module border border-secondary px-3 py-2.5 font-body text-sm text-primary transition-colors hover:bg-secondary/60"
+        >
+          <ArrowLeft className="h-4 w-4" strokeWidth={1.8} />
+          กลับหน้า Dashboard CSMJU Portal
+        </a>
         เชื่อมต่อผ่าน CSMJU2030 API Gateway<br />ไม่มีระบบ Login ของตัวเอง
         <form action="/auth/logout" method="post" className="mt-4">
           <button
