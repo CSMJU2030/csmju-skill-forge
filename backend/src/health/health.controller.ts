@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
-// api-conventions.md: "ต้องมี Endpoint GET /health สำหรับตรวจสถานะระบบเสมอ"
-@Controller('health')
+// Keep the versioned health endpoint and expose the Core Hub monitor alias.
+@Controller(['health', 'api/health'])
 export class HealthController {
   @Get()
   check() {

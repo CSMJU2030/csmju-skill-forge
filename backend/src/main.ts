@@ -16,6 +16,7 @@ async function bootstrap() {
   // api-conventions.md: all endpoints live under /api/v1, kebab-case, plural nouns.
   app.setGlobalPrefix('api/v1', {
     exclude: [
+      { path: 'api/health', method: RequestMethod.GET },
       { path: 'auth/login', method: RequestMethod.GET },
       { path: 'auth/callback', method: RequestMethod.GET },
       { path: 'auth/logout', method: RequestMethod.POST },
