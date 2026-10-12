@@ -84,7 +84,7 @@ role mapping; the backend has no development identity fallback.
 
 | Method | Path | Notes |
 |---|---|---|
-| GET | `/health` | no identity required |
+| GET | `/health` | no identity required (`/api/v1/health`; monitor alias: `/api/health`) |
 | GET | `/career-paths` | catalog of target careers + required skills |
 | GET | `/courses?plan_id=` | curriculum courses, tagged with the skills they build |
 | GET | `/skills` | skill taxonomy |

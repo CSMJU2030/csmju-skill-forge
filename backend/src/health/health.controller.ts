@@ -1,10 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
 
-// api-conventions.md: "ต้องมี Endpoint GET /health สำหรับตรวจสถานะระบบเสมอ"
+function healthStatus() {
+  return { status: 'ok', service: 'csmju-skill-forge', time: new Date().toISOString() };
+}
+
 @Controller('health')
 export class HealthController {
   @Get()
   check() {
-    return { status: 'ok', service: 'csmju-skill-forge', time: new Date().toISOString() };
+    return healthStatus();
+  }
+}
+
+@Controller('api/health')
+export class ApiHealthController {
+  @Get()
+  check() {
+    return healthStatus();
   }
 }
