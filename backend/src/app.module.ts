@@ -47,7 +47,7 @@ export class AppModule implements NestModule {
     // Health and SSO handoff routes must remain reachable without an identity.
     consumer
       .apply(JwtIdentityMiddleware)
-      .exclude('health', 'auth/login', 'auth/callback', 'auth/logout')
+      .exclude('health', 'api/health', 'auth/login', 'auth/callback', 'auth/logout')
       .forRoutes('*');
   }
 }
